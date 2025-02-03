@@ -28,3 +28,13 @@ class ImageProcessor:
     def get_image(self):
         """Возвращает текущее изображение."""
         return self.image
+
+    def resize_image(self, max_width, max_height):
+        """Масштабирует изображение с сохранением пропорций."""
+        if self.image:
+            width, height = self.image.size
+            ratio = min(max_width / width, max_height / height)
+            new_size = (int(width * ratio), int(height * ratio))
+            return self.image.resize(new_size, Image.Resampling.LANCZOS)
+        return None
+

@@ -3,6 +3,7 @@ from tkinter import messagebox, filedialog
 from PIL import ImageTk
 from image_processor import ImageProcessor
 
+
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -11,6 +12,8 @@ class Application(tk.Frame):
         self.image_processor = ImageProcessor()
         self.create_widgets()
         self.create_menu()
+
+        self.master.bind("<Configure>", self.on_window_resize)
 
     def create_menu(self):
         menubar = tk.Menu(self.master)
@@ -31,21 +34,21 @@ class Application(tk.Frame):
         frame = tk.Frame(self.master, bg="lightblue", padx=10, pady=10)
         frame.pack(fill=tk.BOTH)
 
-        # Верхний текст
+        # Верхний текст, устанавливаем поля для ввода текста
         self.top_text_label = tk.Label(frame, text="Верхний текст", font=("Arial", 20))
         self.top_text_label.grid(row=0, column=0, sticky="ew")
 
         self.top_text_entry = tk.Entry(frame)
         self.top_text_entry.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
 
-        # Нижний текст
+        # Нижний текст, устанавливаем поля для ввода текста
         self.bottom_text_label = tk.Label(frame, text="Нижний текст", font=("Arial", 20))
         self.bottom_text_label.grid(row=0, column=1, sticky="ew")
 
         self.bottom_text_entry = tk.Entry(frame)
         self.bottom_text_entry.grid(row=1, column=1, sticky="ew", padx=5, pady=5)
 
-        # Кнопка "Создать мем"
+        # Создаем кнопку "Создать мем"
         self.create_meme_button = tk.Button(frame, text='Создать мем', command=self.on_create_meme)
         self.create_meme_button.grid(row=0, column=3, rowspan=2, sticky='NSEW')
 
@@ -68,7 +71,8 @@ class Application(tk.Frame):
     def on_save_image(self):
         """Обрабатывает сохранение изображения."""
         if self.image_processor.get_image():
-            file_path = filedialog.asksaveasfilename(defaultextension=".jpg", filetypes=[("JPEG files", "*.jpg"), ("PNG files", "*.png")])
+            file_path = filedialog.asksaveasfilename(defaultextension=".jpg",
+                                                     filetypes=[("JPEG files", "*.jpg"), ("PNG files", "*.png")])
             if file_path:
                 self.image_processor.save_image(file_path)
 
@@ -82,10 +86,18 @@ class Application(tk.Frame):
 
     def update_image_display(self):
         """Обновляет изображение в интерфейсе."""
-        self.tk_image = ImageTk.PhotoImage(self.image_processor.get_image())
-        self.image_label.config(image=self.tk_image)
+        if self.image_processor.get_image():
+            label_width = self.image_label.winfo_width()
+            label_height = self.image_label.winfo_height()
+            resized_image = self.image_processor.resize_image(label_width, label_height)
+            if resized_image:
+                self.tk_image = ImageTk.PhotoImage(resized_image)
+                self.image_label.config(image=self.tk_image)
+
+    def on_window_resize(self, event):
+        """Обрабатывает изменение размеров окна."""
+        if self.image_processor.get_image():
+            self.update_image_display()
 
     def about(self):
         messagebox.showinfo("О программе", "Простая программа для создания мемов")
-
-
