@@ -17,13 +17,19 @@ class Application(tk.Frame):
 
     def create_menu(self):
         menubar = tk.Menu(self.master)
+        #  меню "Файл"
         file_menu = tk.Menu(menubar, tearoff=0)
         file_menu.add_command(label="Загрузить", command=self.on_load_image)
         file_menu.add_command(label="Сохранить", command=self.on_save_image)
         file_menu.add_command(label="Сохранить как", command=self.on_save_image)
-
         menubar.add_cascade(label="Файл", menu=file_menu)
+        # Меню "Редактировать"
+        file_edit_menu = tk.Menu(menubar, tearoff=0)
+        file_edit_menu.add_command(label='Поворот по часовой стрелке', command=self.on_rotate_image_positive)
+        file_edit_menu.add_command(label='Поворот против часовой стрелке', command=self.on_rotate_image_negative)
+        menubar.add_cascade(label="Редактировать", menu=file_edit_menu)
 
+        # Меню "О программе"
         help_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Справка", menu=help_menu)
         help_menu.add_command(label="О программе", command=self.about)
@@ -35,18 +41,25 @@ class Application(tk.Frame):
         frame.pack(fill=tk.BOTH)
 
         # Верхний текст, устанавливаем поля для ввода текста
-        self.top_text_label = tk.Label(frame, text="Верхний текст", font=("Arial", 20))
+        self.top_text_label = tk.Label(frame, text="Верхний текст", font=("Arial", 20), bg="lightblue")
         self.top_text_label.grid(row=0, column=0, sticky="ew")
 
         self.top_text_entry = tk.Entry(frame)
         self.top_text_entry.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
 
         # Нижний текст, устанавливаем поля для ввода текста
-        self.bottom_text_label = tk.Label(frame, text="Нижний текст", font=("Arial", 20))
+        self.bottom_text_label = tk.Label(frame, text="Нижний текст", font=("Arial", 20), bg="lightblue")
         self.bottom_text_label.grid(row=0, column=1, sticky="ew")
 
         self.bottom_text_entry = tk.Entry(frame)
         self.bottom_text_entry.grid(row=1, column=1, sticky="ew", padx=5, pady=5)
+
+        # Выбор размера шрифта
+        self.font_size_label = tk.Label(frame, text="Размер шрифта", font=("Arial", 12), bg="lightblue")
+        self.font_size_label.grid(row=2, column=0, sticky="ew")
+
+        self.font_size_entry = tk.Entry(frame)
+        self.font_size_entry.grid(row=3, column=0, sticky="ew", padx=5, pady=5)
 
         # Создаем кнопку "Создать мем"
         self.create_meme_button = tk.Button(frame, text='Создать мем', command=self.on_create_meme)
@@ -81,7 +94,8 @@ class Application(tk.Frame):
         if self.image_processor.get_image():
             top_text = self.top_text_entry.get()
             bottom_text = self.bottom_text_entry.get()
-            self.image_processor.add_text(top_text, bottom_text)
+            font_size = int(self.font_size_entry.get() or 30)
+            self.image_processor.add_text(top_text, bottom_text, font_size)
             self.update_image_display()
 
     def update_image_display(self):
@@ -97,6 +111,16 @@ class Application(tk.Frame):
     def on_window_resize(self, event):
         """Обрабатывает изменение размеров окна."""
         if self.image_processor.get_image():
+            self.update_image_display()
+
+    def on_rotate_image_positive(self):
+        if self.image_processor.get_image():
+            self.image_processor.rotate_image(-90)
+            self.update_image_display()
+
+    def on_rotate_image_negative(self):
+        if self.image_processor.get_image():
+            self.image_processor.rotate_image(90)
             self.update_image_display()
 
     def about(self):
