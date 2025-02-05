@@ -43,7 +43,6 @@ class ImageProcessor:
 
     def rotate_image(self, angle):
         if self.image:
-            # self.image = self.image.rotate(angle, Image.Resampling.LANCZOS)
             self.image = self.image.rotate(angle, Image.Resampling.NEAREST)
         return None
     

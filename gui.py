@@ -27,8 +27,8 @@ class Application(tk.Frame):
         menubar.add_cascade(label="Файл", menu=file_menu)
         # Меню "Редактировать"
         file_edit_menu = tk.Menu(menubar, tearoff=0)
-        file_edit_menu.add_command(label='Поворот по часовой стрелке', command=self.on_rotate_image_positive)
-        file_edit_menu.add_command(label='Поворот против часовой стрелке', command=self.on_rotate_image_negative)
+        file_edit_menu.add_command(image=self.right_icon, command=self.on_rotate_image_positive)
+        file_edit_menu.add_command(image=self.left_icon, command=self.on_rotate_image_negative)
         menubar.add_cascade(label="Редактировать", menu=file_edit_menu)
 
         # Меню "О программе"
@@ -64,12 +64,15 @@ class Application(tk.Frame):
         self.font_size_entry.grid(row=1, column=3, padx=5, pady=5)
 
         self.left_arrow_button = tk.Button(frame, image=self.left_icon, command=self.on_rotate_image_negative)
-        self.left_arrow_button.grid(row=3, column=0, padx=5, pady=5)
-        self.left_arrow_button.config(width=50, height=50, padx=5, pady=5)
+        self.left_arrow_button.place(x=24, y=55)
+        self.left_arrow_button.config(width=20, height=15, padx=5, pady=5)
+
+        self.rotate_image_entry = tk.Entry(frame, width=3)
+        self.rotate_image_entry.grid(row=3, column=0, padx=5, pady=5)
 
         self.right_arrow_button = tk.Button(frame, image=self.right_icon, command=self.on_rotate_image_positive)
-        self.right_arrow_button.grid(row=3, column=1, padx=5, pady=5)
-        self.right_arrow_button.config(width=50, height=50, padx=5, pady=5)
+        self.right_arrow_button.place(x=85, y=55)
+        self.right_arrow_button.config(width=20, height=15, padx=5, pady=5)
 
         # Создаем кнопку "Создать мем"
         self.create_meme_button = tk.Button(frame, text='Создать мем', command=self.on_create_meme)
@@ -125,12 +128,14 @@ class Application(tk.Frame):
 
     def on_rotate_image_positive(self):
         if self.image_processor.get_image():
-            self.image_processor.rotate_image(-90)
+            angle_size = int(self.rotate_image_entry.get() or 90)
+            self.image_processor.rotate_image(-angle_size)
             self.update_image_display()
 
     def on_rotate_image_negative(self):
         if self.image_processor.get_image():
-            self.image_processor.rotate_image(90)
+            angle_size = int(self.rotate_image_entry.get() or 90)
+            self.image_processor.rotate_image(angle_size)
             self.update_image_display()
 
     def about(self):
