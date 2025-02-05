@@ -9,6 +9,7 @@ class Application(tk.Frame):
         super().__init__(master)
         self.master = master
         self.left_icon = PhotoImage(file='image/стрелка_L.png')
+        self.right_icon = PhotoImage(file='image/стрелка_R.png')
         self.pack()
         self.image_processor = ImageProcessor()
         self.create_widgets()
@@ -62,9 +63,13 @@ class Application(tk.Frame):
         self.font_size_entry = tk.Entry(frame, width=3)
         self.font_size_entry.grid(row=1, column=3, padx=5, pady=5)
 
-        self.left_arrow_button = tk.Button(frame, image=self.left_icon)
+        self.left_arrow_button = tk.Button(frame, image=self.left_icon, command=self.on_rotate_image_negative)
         self.left_arrow_button.grid(row=3, column=0, padx=5, pady=5)
         self.left_arrow_button.config(width=50, height=50, padx=5, pady=5)
+
+        self.right_arrow_button = tk.Button(frame, image=self.right_icon, command=self.on_rotate_image_positive)
+        self.right_arrow_button.grid(row=3, column=1, padx=5, pady=5)
+        self.right_arrow_button.config(width=50, height=50, padx=5, pady=5)
 
         # Создаем кнопку "Создать мем"
         self.create_meme_button = tk.Button(frame, text='Создать мем', command=self.on_create_meme)
