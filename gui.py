@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import messagebox, filedialog, PhotoImage
 from PIL import ImageTk
 from image_processor import ImageProcessor
 
@@ -8,6 +8,7 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
+        self.left_icon = PhotoImage(file='image/стрелка_L.png')
         self.pack()
         self.image_processor = ImageProcessor()
         self.create_widgets()
@@ -41,32 +42,36 @@ class Application(tk.Frame):
         frame.pack(fill=tk.BOTH)
 
         # Верхний текст, устанавливаем поля для ввода текста
-        self.top_text_label = tk.Label(frame, text="Верхний текст", font=("Arial", 20), bg="lightblue")
+        self.top_text_label = tk.Label(frame, text="Верхний текст", font=("Arial", 10), bg="lightblue")
         self.top_text_label.grid(row=0, column=0, sticky="ew")
 
         self.top_text_entry = tk.Entry(frame)
         self.top_text_entry.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
 
         # Нижний текст, устанавливаем поля для ввода текста
-        self.bottom_text_label = tk.Label(frame, text="Нижний текст", font=("Arial", 20), bg="lightblue")
+        self.bottom_text_label = tk.Label(frame, text="Нижний текст", font=("Arial", 10), bg="lightblue")
         self.bottom_text_label.grid(row=0, column=1, sticky="ew")
 
         self.bottom_text_entry = tk.Entry(frame)
         self.bottom_text_entry.grid(row=1, column=1, sticky="ew", padx=5, pady=5)
 
         # Выбор размера шрифта
-        self.font_size_label = tk.Label(frame, text="Размер шрифта", font=("Arial", 12), bg="lightblue")
-        self.font_size_label.grid(row=2, column=0, sticky="ew")
+        self.font_size_label = tk.Label(frame, text="Размер шрифта", font=("Arial", 10), bg="lightblue")
+        self.font_size_label.grid(row=0, column=3)
 
-        self.font_size_entry = tk.Entry(frame)
-        self.font_size_entry.grid(row=3, column=0, sticky="ew", padx=5, pady=5)
+        self.font_size_entry = tk.Entry(frame, width=3)
+        self.font_size_entry.grid(row=1, column=3, padx=5, pady=5)
+
+        self.left_arrow_button = tk.Button(frame, image=self.left_icon)
+        self.left_arrow_button.grid(row=3, column=0, padx=5, pady=5)
+        self.left_arrow_button.config(width=50, height=50, padx=5, pady=5)
 
         # Создаем кнопку "Создать мем"
         self.create_meme_button = tk.Button(frame, text='Создать мем', command=self.on_create_meme)
-        self.create_meme_button.grid(row=0, column=3, rowspan=2, sticky='NSEW')
+        self.create_meme_button.grid(row=0, column=4, rowspan=2, sticky='NSEW')
 
         # Область для отображения изображения
-        frame_image = tk.Frame(self.master, padx=10, pady=10)
+        frame_image = tk.Frame(self.master, padx=5, pady=5)
         frame_image.pack(fill=tk.BOTH, expand=True)
         self.image_label = tk.Label(frame_image)
         self.image_label.pack()
