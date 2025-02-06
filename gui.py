@@ -1,7 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox, filedialog, PhotoImage
+from tkinter import font, scrolledtext
+from tkinter import ttk
 from PIL import ImageTk
 from image_processor import ImageProcessor
+import tkinter.font as tkFont
 
 
 class Application(tk.Frame):
@@ -38,51 +41,28 @@ class Application(tk.Frame):
 
         self.master.config(menu=menubar)
 
+    def update_font(self):
+        # Получаем выбранный шрифт и размер
+        self.selected_font = self.font_family.get()
+        self.selected_size = self.size_menu.get()
+        print(self.selected_font, self.selected_size)
+
     def create_widgets(self):
-        frame = tk.Frame(self.master, bg="lightblue", padx=10, pady=10)
-        frame.pack(fill=tk.BOTH)
+        self.frame = tk.Frame(self.master, bg="lightblue", padx=10, pady=10)
+        self.frame.pack(side=tk.TOP, fill=tk.X)
+        self.fount_choice()
 
-        # Верхний текст, устанавливаем поля для ввода текста
-        self.top_text_label = tk.Label(frame, text="Верхний текст", font=("Arial", 10), bg="lightblue")
-        self.top_text_label.grid(row=0, column=0, sticky="ew")
-
-        self.top_text_entry = tk.Entry(frame)
-        self.top_text_entry.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
-
-        # Нижний текст, устанавливаем поля для ввода текста
-        self.bottom_text_label = tk.Label(frame, text="Нижний текст", font=("Arial", 10), bg="lightblue")
-        self.bottom_text_label.grid(row=0, column=1, sticky="ew")
-
-        self.bottom_text_entry = tk.Entry(frame)
-        self.bottom_text_entry.grid(row=1, column=1, sticky="ew", padx=5, pady=5)
-
-        # Выбор размера шрифта
-        self.font_size_label = tk.Label(frame, text="Размер шрифта", font=("Arial", 10), bg="lightblue")
-        self.font_size_label.grid(row=0, column=3)
-
-        self.font_size_entry = tk.Entry(frame, width=3)
-        self.font_size_entry.grid(row=1, column=3, padx=5, pady=5)
-
-        self.left_arrow_button = tk.Button(frame, image=self.left_icon, command=self.on_rotate_image_negative)
-        self.left_arrow_button.place(x=24, y=55)
-        self.left_arrow_button.config(width=20, height=15, padx=5, pady=5)
-
-        self.rotate_image_entry = tk.Entry(frame, width=3)
-        self.rotate_image_entry.grid(row=3, column=0, padx=5, pady=5)
-
-        self.right_arrow_button = tk.Button(frame, image=self.right_icon, command=self.on_rotate_image_positive)
-        self.right_arrow_button.place(x=85, y=55)
-        self.right_arrow_button.config(width=20, height=15, padx=5, pady=5)
-
-        # Создаем кнопку "Создать мем"
-        self.create_meme_button = tk.Button(frame, text='Создать мем', command=self.on_create_meme)
-        self.create_meme_button.grid(row=0, column=4, rowspan=2, sticky='NSEW')
 
         # Область для отображения изображения
         frame_image = tk.Frame(self.master, padx=5, pady=5)
         frame_image.pack(fill=tk.BOTH, expand=True)
         self.image_label = tk.Label(frame_image)
         self.image_label.pack()
+    def fount_choice(self):
+        fonts = tkFont.families()
+        font_combobox = ttk.Combobox(self.frame, values=fonts)
+        font_combobox.pack(side=tk.LEFT, padx=5, pady=5)
+        font_combobox.set("Arial")
 
     def on_load_image(self):
         """Обрабатывает загрузку изображения."""
