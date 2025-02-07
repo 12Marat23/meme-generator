@@ -17,9 +17,13 @@ class Application(tk.Frame):
         Конструктор класса приложения
         """
         super().__init__(master)
+        self.italic_is_fixed = True
+        self.is_fixed = True
         self.master = master
         self.left_icon = PhotoImage(file='image/стрелка_L.png')
         self.right_icon = PhotoImage(file='image/стрелка_R.png')
+        self.bold_icon = PhotoImage(file='image/bold.png')
+        self.italic_icon = PhotoImage(file='image/italic.png')
         self.selected_size = 12
         self.selected_font = 'arial'
         self.pack()
@@ -88,11 +92,36 @@ class Application(tk.Frame):
         self.create_meme_button = tk.Button(self.frame2, text='Создать мем', command=self.on_create_meme)
         self.create_meme_button.pack(side=tk.LEFT, padx=5, pady=5)
 
+        self.bold_button = tk.Button(self.frame, image=self.bold_icon, command=self.bold_button_state, borderwidth=0,
+                                     bg='lightblue')
+        self.bold_button.pack(side=tk.LEFT, padx=5, pady=5)
+
+        self.italic_button = tk.Button(self.frame, image=self.italic_icon, command=self.italic_button_state,
+                                       borderwidth=0, bg='lightblue')
+        self.italic_button.pack(side=tk.LEFT, padx=5, pady=5)
+
         # Область для отображения изображения
         frame_image = tk.Frame(self.master, padx=5, pady=5)
         frame_image.pack(fill=tk.BOTH, expand=True)
         self.image_label = tk.Label(frame_image)
         self.image_label.pack()
+
+    def bold_button_state(self):
+        """
+        Изменение состояния кнопки
+        """
+        self.is_fixed = not self.is_fixed
+        if self.is_fixed:
+            self.bold_button.config(bg="lightblue")
+        else:
+            self.bold_button.config(bg="grey")
+
+    def italic_button_state(self):
+        self.italic_is_fixed = not self.italic_is_fixed
+        if self.italic_is_fixed:
+            self.italic_button.config(bg="lightblue")
+        else:
+            self.italic_button.config(bg="grey")
 
     def rotate_image(self):
         """
