@@ -51,7 +51,7 @@ class ImageProcessor:
                     if is_underline:
                         # Подчеркивание текста (не поддерживается напрямую в Pillow)
                         pass
-                    print(f"Найден шрифт: {font_path}")
+                    print(f"Найден шрифт:font {font_path}")
                 else:
                     font = ImageFont.load_default(font_size)
                     print(f"Не найден шрифт: {font_path}, используется шрифт по умолчанию{font}")
@@ -64,6 +64,7 @@ class ImageProcessor:
                 y = 10
                 for line in top_text_lines:
                     draw.text((10, y), line, fill="white", font=font)
+                    print(font)
                     y += font_size + 5
 
                 # Добавление нижнего текста
