@@ -35,7 +35,7 @@ class ImageProcessor:
                 return font.fname
         return None
 
-    def add_text(self, top_text, bottom_text, font_size=30, font_path=None):
+    def add_text(self, top_text, bottom_text, is_bold=False, is_italic=False, is_underline=False, font_size=30, font_path=None):
         """
         Добавляет текст на изображение.
         """
@@ -44,7 +44,13 @@ class ImageProcessor:
                 draw = ImageDraw.Draw(self.image)
                 font_path = self.get_font_path(font_path)
                 if font_path:
-                    font = ImageFont.truetype(font_path, font_size)
+                    if is_bold:
+                        font = ImageFont.truetype(font_path, font_size)  # Жирный шрифт
+                    if is_italic:
+                        font = ImageFont.truetype(font_path, font_size)  # Курсивный шрифт
+                    if is_underline:
+                        # Подчеркивание текста (не поддерживается напрямую в Pillow)
+                        pass
                     print(f"Найден шрифт: {font_path}")
                 else:
                     font = ImageFont.load_default(font_size)

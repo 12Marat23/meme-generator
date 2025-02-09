@@ -19,11 +19,13 @@ class Application(tk.Frame):
         super().__init__(master)
         self.italic_is_fixed = True
         self.is_fixed = True
+        self.underline_is_fixed = True
         self.master = master
         self.left_icon = PhotoImage(file='image/стрелка_L.png')
         self.right_icon = PhotoImage(file='image/стрелка_R.png')
         self.bold_icon = PhotoImage(file='image/bold.png')
         self.italic_icon = PhotoImage(file='image/italic.png')
+        self.underline__icon = PhotoImage(file='image/underline.png')
         self.selected_size = 12
         self.selected_font = 'arial'
         self.pack()
@@ -59,17 +61,6 @@ class Application(tk.Frame):
 
         self.master.config(menu=menubar)
 
-    def update_font(self):
-        """
-        Обновление выбранного шрифта и размера
-        """
-        try:
-            self.selected_font = self.font_combobox.get()
-            self.selected_size = int(self.size_combobox.get())
-            print(self.selected_font)
-        except Exception as e:
-            messagebox.showerror("Ошибка", f"Не удалось обновить шрифт: {e}")
-
     def create_widgets(self):
         """
         Создание виджетов
@@ -92,13 +83,20 @@ class Application(tk.Frame):
         self.create_meme_button = tk.Button(self.frame2, text='Создать мем', command=self.on_create_meme)
         self.create_meme_button.pack(side=tk.LEFT, padx=5, pady=5)
 
+        # Кнопка жирный текст
         self.bold_button = tk.Button(self.frame, image=self.bold_icon, command=self.bold_button_state, borderwidth=0,
                                      bg='lightblue')
         self.bold_button.pack(side=tk.LEFT, padx=5, pady=5)
 
+        # Кнопка курсив текст
         self.italic_button = tk.Button(self.frame, image=self.italic_icon, command=self.italic_button_state,
                                        borderwidth=0, bg='lightblue')
         self.italic_button.pack(side=tk.LEFT, padx=5, pady=5)
+
+        # Кнопка подчеркнутый текст
+        self.underline_button = tk.Button(self.frame, image=self.underline__icon, command=self.underline_button_state,
+                                       borderwidth=0, bg='lightblue')
+        self.underline_button.pack(side=tk.LEFT, padx=5, pady=5)
 
         # Область для отображения изображения
         frame_image = tk.Frame(self.master, padx=5, pady=5)
@@ -106,32 +104,34 @@ class Application(tk.Frame):
         self.image_label = tk.Label(frame_image)
         self.image_label.pack()
 
-    def bold_button_state(self):
+    def meme_text_input(self):
         """
-        Изменение состояния кнопки
+        Ввод текста в поля ввода
         """
-        self.is_fixed = not self.is_fixed
-        if self.is_fixed:
-            self.bold_button.config(bg="lightblue")
-        else:
-            self.bold_button.config(bg="grey")
+        # Верхний текст
+        self.top_text_label = tk.Label(self.frame2, text="Верхний текст", font=("Arial", 10), bg="lightblue")
+        self.top_text_label.pack(side=tk.LEFT, padx=5, pady=5)
+        # Поле ввод для верхнего текста
+        self.top_text_entry = tk.Entry(self.frame2, width=20)
+        self.top_text_entry.pack(side=tk.LEFT, padx=5, pady=5)
 
-    def italic_button_state(self):
-        self.italic_is_fixed = not self.italic_is_fixed
-        if self.italic_is_fixed:
-            self.italic_button.config(bg="lightblue")
-        else:
-            self.italic_button.config(bg="grey")
+        # Нижний текст
+        self.bottom_text_label = tk.Label(self.frame2, text="Нижний текст", font=("Arial", 10), bg="lightblue")
+        self.bottom_text_label.pack(side=tk.LEFT, padx=5, pady=5)
+        #  Поля для ввода текста
+        self.bottom_text_entry = tk.Entry(self.frame2, width=20)
+        self.bottom_text_entry.pack(side=tk.LEFT, padx=5, pady=5)
 
-    def rotate_image(self):
+    def update_font(self):
         """
-        Поворот изображения вокруг оси
+        Обновление выбранного шрифта и размера
         """
-        self.rotate_image_label = tk.Label(self.frame, text="Угол поворота", font=("Arial", 10), bg="lightblue")
-        self.rotate_image_label.pack(side=tk.LEFT, padx=5, pady=5)
-        self.rotate_image_entry = tk.Entry(self.frame, width=5)
-        self.rotate_image_entry.pack(side=tk.LEFT, padx=5, pady=5)
-        self.rotate_image_entry.insert(0, "90")  # Значение по умолчанию
+        try:
+            self.selected_font = self.font_combobox.get()
+            self.selected_size = int(self.size_combobox.get())
+            print(self.selected_font)
+        except Exception as e:
+            messagebox.showerror("Ошибка", f"Не удалось обновить шрифт: {e}")
 
     def font_choice(self):
         """
@@ -151,23 +151,31 @@ class Application(tk.Frame):
         self.size_combobox.pack(side=tk.LEFT, padx=5, pady=5)
         self.size_combobox.set(12)
 
-    def meme_text_input(self):
+    def bold_button_state(self):
         """
-        Ввод текста в поля ввода
+        Изменение состояния кнопки
         """
-        # Верхний текст
-        self.top_text_label = tk.Label(self.frame2, text="Верхний текст", font=("Arial", 10), bg="lightblue")
-        self.top_text_label.pack(side=tk.LEFT, padx=5, pady=5)
-        # Поле ввод для верхнего текста
-        self.top_text_entry = tk.Entry(self.frame2, width=20)
-        self.top_text_entry.pack(side=tk.LEFT, padx=5, pady=5)
+        self.is_fixed = not self.is_fixed
+        if self.is_fixed:
+            self.bold_button.config(bg="lightblue")
+            self.weight = "normal"
+        else:
+            self.bold_button.config(bg="grey")
+            self.weight = "bold"
 
-        # Нижний текст
-        self.bottom_text_label = tk.Label(self.frame2, text="Нижний текст", font=("Arial", 10), bg="lightblue")
-        self.bottom_text_label.pack(side=tk.LEFT, padx=5, pady=5)
-        #  Поля для ввода текста
-        self.bottom_text_entry = tk.Entry(self.frame2, width=20)
-        self.bottom_text_entry.pack(side=tk.LEFT, padx=5, pady=5)
+    def italic_button_state(self):
+        self.italic_is_fixed = not self.italic_is_fixed
+        if self.italic_is_fixed:
+            self.italic_button.config(bg="lightblue")
+        else:
+            self.italic_button.config(bg="grey")
+
+    def underline_button_state(self):
+        self.underline_is_fixed = not self.underline_is_fixed
+        if self.underline_is_fixed:
+            self.underline_button.config(bg="lightblue")
+        else:
+            self.underline_button.config(bg="grey")
 
     def on_load_image(self):
         """
@@ -200,7 +208,10 @@ class Application(tk.Frame):
             bottom_text = self.bottom_text_entry.get()
             font_size = int(self.selected_size)
             font_path = self.selected_font
-            self.image_processor.add_text(top_text, bottom_text, font_size, font_path)
+            is_bold = not self.is_fixed
+            is_italic = not self.italic_is_fixed
+            is_underline = not self.underline_is_fixed
+            self.image_processor.add_text(top_text, bottom_text, is_bold, is_italic, is_underline, font_size, font_path)
             self.update_image_display()
 
     def update_image_display(self):
@@ -221,6 +232,16 @@ class Application(tk.Frame):
         """
         if self.image_processor.get_image():
             self.update_image_display()
+
+    def rotate_image(self):
+        """
+        Поворот изображения вокруг оси
+        """
+        self.rotate_image_label = tk.Label(self.frame, text="Угол поворота", font=("Arial", 10), bg="lightblue")
+        self.rotate_image_label.pack(side=tk.LEFT, padx=5, pady=5)
+        self.rotate_image_entry = tk.Entry(self.frame, width=5)
+        self.rotate_image_entry.pack(side=tk.LEFT, padx=5, pady=5)
+        self.rotate_image_entry.insert(0, "90")  # Значение по умолчанию
 
     def on_rotate_image_clockwise(self):
         """
