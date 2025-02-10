@@ -32,17 +32,19 @@ class ImageProcessor:
         """
         for font in fm.fontManager.ttflist:
             if font.name == font_name:
+                print(f'get_font_path: {font.name}')
                 return font.fname
         return None
 
-    def add_text(self, top_text, bottom_text, is_bold=False, is_italic=False, is_underline=False, font_size=30, font_path=None):
+    def add_text(self, top_text, bottom_text, font_is_font, is_bold=False, is_italic=False, is_underline=False, font_size=30, font_path=None):
         """
         Добавляет текст на изображение.
         """
         if self.image:
             try:
                 draw = ImageDraw.Draw(self.image)
-                font_path = self.get_font_path(font_path)
+                font_path = self.get_font_path(font_is_font.actual()["family"])
+                print(font_path)
                 if font_path:
                     if is_bold:
                         font = ImageFont.truetype(font_path, font_size)  # Жирный шрифт

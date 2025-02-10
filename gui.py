@@ -207,15 +207,16 @@ class Application(tk.Frame):
             top_text = self.top_text_entry.get()
             bottom_text = self.bottom_text_entry.get()
 
-            font_size = int(self.selected_size)
-            font_path = self.selected_font
-            is_bold = not self.is_fixed
-            is_italic = not self.italic_is_fixed
-            is_underline = not self.underline_is_fixed
+            # font_size = int(self.selected_size)
+            # font_path = self.selected_font
+            # is_bold = not self.is_fixed
+            # is_italic = not self.italic_is_fixed
+            # is_underline = not self.underline_is_fixed
             # __________________
             font_2 = tkFont.Font(family=self.selected_font, size=self.selected_size)
             print(font_2.actual()["family"], font_2.actual()["size"])
-            self.image_processor.add_text(top_text, bottom_text, is_bold, is_italic, is_underline, font_size, font_path)
+            self.image_processor.add_text(top_text, bottom_text, font_2)
+            # self.image_processor.add_text(top_text, bottom_text, is_bold, is_italic, is_underline, font_size, font_path)
             self.update_image_display()
 
     def update_image_display(self):
